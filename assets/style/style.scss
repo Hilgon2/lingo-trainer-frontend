@@ -1,0 +1,22 @@
+@import "colors";
+@import "variables";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+html, body {
+  background-color: #c9e5f9;
+  font-size: 18px;
+}
