@@ -1,7 +1,7 @@
 class Config {
-    constructor() {
-        this.apiConfig = null;
+    apiConfig = null;
 
+    constructor() {
         fetch("config/config.json")
             .then(resp => resp.json())
             .then(config => {
@@ -9,14 +9,21 @@ class Config {
                     .then(resp => resp.json())
                     .then(environmentConfig => {
                         this.apiConfig = environmentConfig;
-                    }).catch(error => {
+                    }).catch(() => {
                     console.warn(`Something went wrong reading file config/config-${config.environment}.json. Check if the file is missing.`);
                 });
-            })
+            });
     }
 
     getEndpoint() {
-        return this.apiConfig.apiEndpoint;
+        const config = this.apiConfig;
+        if (!config) {
+            setTimeout(() => {
+                return this.getEndpoint();
+            }, 300);
+        } else {
+            return config.apiEndpoint;
+        }
     }
 }
 

@@ -72,7 +72,24 @@ class Authentication {
     }
 
     checkLogin() {
+        const token = sessionStorage.getItem("token");
+        const loginPage = "./login.html";
+        if (!token && !window.location.pathname.includes("login.html")) {
+            window.location.replace(loginPage);
+        }
 
+        fetch(`${config.getEndpoint()}/auth/logged-in`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            method: "post",
+        }).then(resp => {
+            if (resp.status !== 204) {
+                const redirectPage = !window.location.pathname.includes("login.html") ? loginPage : "./index.html";
+                window.location.replace(redirectPage);
+            }
+        });
     }
 }
 
