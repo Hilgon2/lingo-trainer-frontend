@@ -85,8 +85,17 @@ class Authentication {
             },
             method: "post",
         }).then(resp => {
+            let redirectPage;
             if (resp.status !== 204) {
-                const redirectPage = !window.location.pathname.includes("login.html") ? loginPage : "./index.html";
+                if (!window.location.pathname.includes("login.html")) {
+                    redirectPage = loginPage;
+                }
+            } else {
+                if (window.location.pathname.includes("login.html")) {
+                    redirectPage = "./index.html";
+                }
+            }
+            if (redirectPage) {
                 window.location.replace(redirectPage);
             }
         });
