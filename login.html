@@ -9,13 +9,17 @@
     <script src="assets/js/login.js" type="module" defer></script>
 </head>
 <body>
+<div class="title">
+    <h1>De enige echte Lingo trainer!</h1>
+</div>
 <div class="login">
     <div class="login-container">
         <header class="login__title">
-            <h1>Lingo trainer</h1>
+            <h2>Inloggen</h2>
         </header>
         <div class="login__body">
             <form class="login-form">
+                <div class="login__error">Ongeldige gebruikersnaam en/of wachtwoord.</div>
                 <label>
                     <input type="text" placeholder="Gebruikersnaam" name="username"/>
                 </label>
@@ -24,6 +28,32 @@
                 </label>
                 <button type="submit">Inloggen</button>
             </form>
+            <div class="no-account-info">
+                Nog geen account? <a href="#" class="register-link">Meld je gratis aan!</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="register hidden">
+    <div class="register-container">
+        <header class="register__title">
+            <h2>Registreren</h2>
+        </header>
+        <div class="register__body">
+            <form class="register-form">
+                <div class="register__message">Ongeldige gebruikersnaam en/of wachtwoord.</div>
+                <label>
+                    <input type="text" placeholder="Gebruikersnaam" name="username"/>
+                </label>
+                <label>
+                    <input type="password" placeholder="Wachtwoord" name="password"/>
+                </label>
+                <button type="submit">Registreren</button>
+            </form>
+            <div class="existing-account-info">
+                Heeft u al een account? <a href="#" class="login-link">Klik hier om in te loggen</a>
+            </div>
         </div>
     </div>
 </div>

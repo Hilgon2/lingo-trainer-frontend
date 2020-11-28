@@ -1,46 +1,62 @@
-.login {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.title {
+  text-align: center;
+  margin-bottom: 140px;
+  padding-top: 40px;
 }
-.login-container {
-  display: flex;
+
+.login, .register {
+  text-align: center;
+}
+.login.hidden, .register.hidden {
+  display: none;
+}
+.login-container, .register-container {
   background-color: #fff;
   padding: 50px 70px;
   border-radius: 4px;
-  flex-direction: column;
+  display: inline-block;
 }
-.login__title {
+.login__title, .register__title {
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 10px;
   text-align: center;
 }
-.login__body {
-  display: flex;
-}
-.login__body header {
+.login__body header, .register__body header {
   margin-bottom: 20px;
 }
-.login__body label {
+.login__body label, .register__body label {
   display: block;
 }
-.login__body label input {
+.login__body label input, .register__body label input {
   width: 100%;
   margin-bottom: 20px;
   padding: 20px;
   border: 2px solid #ccc;
 }
-.login__body button {
+.login__body button, .register__body button {
   width: 100%;
   padding: 16px;
 }
-.login-form {
+.login-form, .register-form {
   width: 400px;
 }
-.login__error {
+.login__error, .login__message, .register__error, .register__message {
+  margin-bottom: 20px;
+  display: block;
+  transition: 0.4s;
+  visibility: hidden;
+  opacity: 0;
+}
+.login__error.active, .login__message.active, .register__error.active, .register__message.active {
+  visibility: visible;
+  opacity: 1;
+}
+.login__error, .register__error {
   color: red;
+}
+.login .no-account-info, .login .existing-account-info, .register .no-account-info, .register .existing-account-info {
+  text-align: left;
+  margin-top: 10px;
 }
 
 /*# sourceMappingURL=login.css.map */
