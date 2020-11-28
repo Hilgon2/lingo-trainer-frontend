@@ -1,7 +1,11 @@
-class Login {
-    constructor() {
-        console.log("login")
-    }
-}
+import login from "./modules/Login.js";
+import config from "./modules/Config.js";
 
-export default new Login();
+bindEvents();
+
+function bindEvents() {
+    document.querySelector(".login-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        login.login(event.target);
+    })
+}

@@ -3,5 +3,5 @@ window.onload = () => {
 }
 
 function onLoad() {
-    console.log("App loaded!");
+    console.log("Application loaded!");
 }

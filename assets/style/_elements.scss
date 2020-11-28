@@ -1,0 +1,22 @@
+@import "variables";
+
+input {
+  padding: 5px 8px;
+  border: 1px solid #bbbbbb;
+  border-radius: $border-radius;
+  font-size: $font-size;
+}
+
+button {
+  font-size: $font-size;
+  border: 0;
+  padding: 8px 12px;
+  background-color: #437dc8;
+  color: #fff;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover {
+    background-color: darken(#437dc8, 10%);
+  }
+}
