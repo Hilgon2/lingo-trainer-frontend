@@ -34,7 +34,6 @@ class Authentication {
                 }, 100);
             }).catch(error => {
             setTimeout(() => {
-                console.log(error);
                 registerMessage.classList.add("active");
                 registerMessage.textContent = error;
             }, 100);
