@@ -1,0 +1,77 @@
+@import "variables";
+@import "colors";
+
+.container {
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-evenly;
+
+  .layout-grid {
+    background-color: #fff;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.5);
+    border-radius: $border-radius;
+    border: 0;
+    padding: 20px 30px;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    .game {
+      &__word {
+        margin-bottom: 10px;
+        display: flex;
+
+        &-letter {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: $border-radius;
+          border: 1px solid #7d7d7d;
+          width: 70px;
+          height: 70px;
+          font-size: 40px;
+
+          &:not(:last-child) {
+            margin-right: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .sidebar {
+    width: 20%;
+
+    .user {
+      > div {
+        margin-bottom: 10px;
+      }
+
+      .logout {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.toast {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  color: #fff;
+  background-color: $toast-default;
+  padding: 8px 18px;
+  border-radius: $border-radius $border-radius 0 0;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.5);
+  transform: translateX(-50%);
+  transition: $transition;
+
+  &.error {
+    background-color: $toast-error;
+  }
+
+  &.hidden {
+    bottom: -100px;
+  }
+}

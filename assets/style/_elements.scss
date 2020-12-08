@@ -1,6 +1,6 @@
 @import "variables";
 
-input {
+input, select {
   padding: 5px 8px;
   border: 1px solid #bbbbbb;
   border-radius: $border-radius;
@@ -19,4 +19,9 @@ button {
   &:hover {
     background-color: darken(#437dc8, 10%);
   }
+}
+
+table {
+  width: 100%;
+  text-align: left;
 }

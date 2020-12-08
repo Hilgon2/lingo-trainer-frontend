@@ -1,4 +1,4 @@
-input {
+input, select {
   padding: 5px 8px;
   border: 1px solid #bbbbbb;
   border-radius: 4px;
@@ -18,6 +18,11 @@ button:hover {
   background-color: #3164a7;
 }
 
+table {
+  width: 100%;
+  text-align: left;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -34,10 +39,16 @@ table {
 }
 
 html, body {
-  background-color: #ddd;
+  background-color: #84bcf9;
   font-size: 18px;
   width: 100%;
   height: 100%;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
+body {
+  padding: 100px;
 }
 
 /*# sourceMappingURL=style.css.map */

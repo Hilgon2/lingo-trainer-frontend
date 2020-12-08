@@ -66,38 +66,49 @@ class Authentication {
             }).catch(error => {
             setTimeout(() => {
                 form.querySelector(".login__error").classList.add("active");
-            }, 100);
+            }, 300);
         });
     }
 
     checkLogin() {
-        const token = sessionStorage.getItem("token");
-        const loginPage = "./login.html";
-        if (!token && !window.location.pathname.includes("login.html")) {
-            window.location.replace(loginPage);
-        }
+        if (!config.getEndpoint()) {
+            setTimeout(() => {
+                return this.checkLogin();
+            }, 300);
+        } else {
+            const token = sessionStorage.getItem("token");
+            const loginPage = "./login.html";
+            if (!token && !window.location.pathname.includes("login.html")) {
+                location.replace(loginPage);
+            }
 
-        fetch(`${config.getEndpoint()}/auth/logged-in`, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            method: "post",
-        }).then(resp => {
-            let redirectPage;
-            if (resp.status !== 204) {
-                if (!window.location.pathname.includes("login.html")) {
-                    redirectPage = loginPage;
+            fetch(`${config.getEndpoint()}/auth/logged-in`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                method: "post",
+            }).then(resp => {
+                let redirectPage;
+                if (resp.status !== 204) {
+                    if (!location.pathname.includes("login.html")) {
+                        redirectPage = loginPage;
+                    }
+                } else {
+                    if (location.pathname.includes("login.html")) {
+                        redirectPage = "./index.html";
+                    }
                 }
-            } else {
-                if (window.location.pathname.includes("login.html")) {
-                    redirectPage = "./index.html";
+                if (redirectPage) {
+                    location.replace(redirectPage);
                 }
-            }
-            if (redirectPage) {
-                window.location.replace(redirectPage);
-            }
-        });
+            });
+        }
+    }
+
+    logout() {
+        sessionStorage.removeItem("token");
+        location.replace("login.html");
     }
 }
 

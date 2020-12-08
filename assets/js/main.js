@@ -1,13 +1,11 @@
 import auth from "./modules/Authentication.js";
 import config from "./modules/Config.js";
 
-window.onload = () => {
-    onLoad();
-}
+onLoad();
 
 function onLoad() {
     if (config.getEndpoint() === null) {
-        onLoad();
+        return onLoad();
     } else {
         checkIfLoggedIn();
     }

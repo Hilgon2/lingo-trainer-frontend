@@ -3,10 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <title>Lingo trainer</title>
+    <link rel="stylesheet" href="assets/style/game.css">
     <link rel="stylesheet" href="assets/style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
     <script src="assets/js/main.js" type="module" defer></script>
+    <script src="assets/js/game.js" type="module" defer></script>
+    <script src="assets/js/lib/jwt-decode.js"></script>
+
 </head>
 <body>
-Lingo
+<main>
+    <div class="container">
+        <div class="content">
+            <div class="layout-grid game">
+                <!--                <div class="game__word">-->
+                <!--                    <div class="game__word-letter">W</div>-->
+                <!--                    <div class="game__word-letter">A</div>-->
+                <!--                    <div class="game__word-letter">T</div>-->
+                <!--                    <div class="game__word-letter">E</div>-->
+                <!--                    <div class="game__word-letter">R</div>-->
+                <!--                </div>-->
+                <div class="create-game">
+                    <div>U heeft geen actieve game</div>
+                    <br/>
+                    <button class="create-game__btn">Nieuwe game aanmaken</button>
+                    <select name="game-languages">
+                    <option value="nl_nl">nl_nl</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="layout-grid user">
+                <div class="user__username-wrapper">Goedendag, <span class="user__username"></span></div>
+                <div class="user__highscore-wrapper">Highscore: <span class="user__highscore"></span></div>
+                <button class="logout">Uitloggen</button>
+            </div>
+            <div class="layout-grid highscores">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Naam</th>
+                        <th>Score</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1.</td>
+                        <td>Terry</td>
+                        <td>52</td>
+                    </tr>
+                    <tr>
+                        <td>1.</td>
+                        <td>Terry</td>
+                        <td>52</td>
+                    </tr>
+                    <tr>
+                        <td>1.</td>
+                        <td>Terry</td>
+                        <td>52</td>
+                    </tr>
+                    <tr>
+                        <td>1.</td>
+                        <td>Terry</td>
+                        <td>52</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<div class="toast hidden">
+    Test toast
+</div>
 </body>
 </html>

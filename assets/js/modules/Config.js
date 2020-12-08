@@ -17,6 +17,7 @@ class Config {
 
     getEndpoint() {
         const config = this.apiConfig;
+
         if (!config) {
             setTimeout(() => {
                 return this.getEndpoint();
