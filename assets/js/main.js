@@ -1,7 +1,7 @@
 import auth from "./modules/Authentication.js";
 import config from "./modules/Config.js";
 
-onLoad();
+window.onload = () => onLoad();
 
 function onLoad() {
     if (config.getEndpoint() === null) {

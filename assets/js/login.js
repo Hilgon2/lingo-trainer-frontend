@@ -1,6 +1,6 @@
 import authentication from "./modules/Authentication.js";
 
-bindEvents();
+window.onload = () => bindEvents();
 
 function bindEvents() {
     document.querySelector(".login-form").addEventListener("submit", (event) => {

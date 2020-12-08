@@ -2,12 +2,13 @@ import auth from "./modules/Authentication.js";
 import dictionary from "./modules/Dictionary.js";
 import game from "./modules/Game.js";
 
-onLoad();
+window.onload = () => onLoad();
 
 function onLoad() {
     setProfile();
     bindEvents();
-    getAvailableLanguages();
+    getActiveGames();
+    dictionary.retrieveLanguages();
 }
 
 function setProfile() {
@@ -26,6 +27,10 @@ function bindEvents() {
     });
 }
 
-function getAvailableLanguages() {
-    dictionary.retrieveLanguages();
+function getActiveGames() {
+    game.retrieveActiveGames().then(response => {
+        if (response.gameId === -1) {
+            document.querySelector(".create-game").classList.remove("hidden");
+        }
+    });
 }
