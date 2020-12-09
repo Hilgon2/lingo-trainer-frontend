@@ -8,7 +8,7 @@ window.onload = () => onLoad();
 function onLoad() {
     setProfile();
     bindEvents();
-    gameScreenHandler();
+    initialGameScreenHandler();
     dictionary.retrieveLanguages();
 }
 
@@ -28,8 +28,8 @@ function bindEvents() {
     // create new game button
     document.querySelector(".create-game__btn").addEventListener("click", () => {
         game.newGame(document.querySelector("select[name=game-languages]").value).then(() => {
-            document.querySelector(".create-game").classList.add("hidden");
-            document.querySelector(".create-round").classList.remove("hidden");
+            toggleScreenVisibility("create-game", false);
+            toggleScreenVisibility("create-round", true);
             toast.showToast("Game aangemaakt");
         });
     });
@@ -38,6 +38,7 @@ function bindEvents() {
     document.querySelector(".create-round__btn").addEventListener("click", () => {
         game.newRound().then(response => {
             document.querySelector(".round-words").innerHTML = "";
+            sessionStorage.setItem("activeRound", JSON.stringify(response));
             newWordLetters(response.firstLetter, response.lettersAmount);
             toast.showToast("Nieuwe ronde gestart");
         });
@@ -47,7 +48,7 @@ function bindEvents() {
     bindPlayTurnBtn();
 }
 
-function gameScreenHandler() {
+function initialGameScreenHandler() {
     game.retrieveActiveGames().then(() => {
         const activeGame = JSON.parse(sessionStorage.getItem("activeGame"));
         if (activeGame.gameId === -1) {
@@ -55,7 +56,7 @@ function gameScreenHandler() {
         } else {
             game.retrieveActiveRound().then(response => {
                 if (!response.active) {
-                    document.querySelector(".create-round").classList.remove("hidden");
+                    toggleScreenVisibility("create-round", true);
                 } else {
                     newWordLetters(response.firstLetter, response.lettersAmount);
                 }
@@ -97,8 +98,9 @@ function newWordLetters(firstLetter, amount, guessedLetters = null) {
     document.querySelector(".round-words").append(word);
     bindWordEvents();
 
-    document.querySelector(".play-turn").classList.remove("hidden");
-    document.querySelector(".create-round").classList.add("hidden");
+    toggleScreenVisibility("round", true);
+    toggleScreenVisibility("play-turn", true);
+    toggleScreenVisibility("create-round", false);
 }
 
 function bindWordEvents() {
@@ -122,27 +124,51 @@ function bindPlayTurnBtn() {
         const words = document.querySelectorAll(".round__word");
         const lastWord = words[words.length - 1];
         let guessedWord = "";
+
         lastWord.querySelectorAll(".word__letter").forEach(letterBox => {
             guessedWord += letterBox.value;
         });
+
         game.playTurn(guessedWord).then(response => {
-            if (response.correctGuess) {
-                document.querySelector(".create-round").classList.remove("hidden");
-                document.querySelector(".play-turn").classList.add("hidden");
+            if (response.gameOver) {
+                toggleScreenVisibility("round", false);
+                toggleScreenVisibility("create-game", true);
+                toast.showToast("Het woord is helaas niet in 5 beurten geraden. Het spel is afgelopen");
+            } else if (response.correctGuess) {
+                toggleScreenVisibility("create-round", true);
+                toggleScreenVisibility("play-turn", false);
+                toggleScreenVisibility("round", false);
                 setProfile();
                 toast.showToast("Het woord is juist geraden! Maak een nieuwe ronde aan om verder te gaan met het spel")
             } else {
-                const guessedLetters = response.feedback.guessedLetters;
-                const firstLetter = response.feedback.code >= 5200 ? response.guessedWord[0] : guessedLetters[0].letter;
-                const guessedLettersLength = guessedLetters === null ? 0 : guessedLetters.length;
-                newWordLetters(firstLetter, guessedLettersLength, guessedLetters);
-            }
+                const activeRound = JSON.parse(sessionStorage.getItem("activeRound"));
+                let firstLetter = activeRound.firstLetter;
+                const guessedLettersLength = activeRound.lettersAmount;
+                let guessedLetters;
 
-            if (response.gameOver) {
-                document.querySelector(".game__round").classList.add("hidden");
-                document.querySelector(".create-game").classList.remove("hidden");
-                toast.showToast("Het woord is helaas niet in 5 beurten geraden. Het spel is afgelopen");
+                if (response.feedback.code !== -9999) {
+                    game.getGameMessage(response.feedback.status).then(response => {
+                        toast.showToast(response);
+                    });
+                } else {
+                    guessedLetters = response.feedback.guessedLetters;
+                }
+                newWordLetters(firstLetter, guessedLettersLength, guessedLetters);
             }
         });
     });
+}
+
+function toggleScreenVisibility(screen, visible) {
+    const screens = {
+        "create-game": ".create-game",
+        "create-round": ".create-round",
+        "round": ".game__round",
+        "play-turn": ".play-turn"
+    }
+    if (visible) {
+        document.querySelector(screens[screen]).classList.remove("hidden");
+    } else {
+        document.querySelector(screens[screen]).classList.add("hidden");
+    }
 }

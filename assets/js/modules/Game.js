@@ -37,10 +37,10 @@ class Game {
                 sessionStorage.setItem("activeGame", JSON.stringify(response));
                 return response;
             }).catch(error => {
-            error.json().then(errorResponse => {
-                toast.showToast(errorResponse.message, true);
+                error.json().then(errorResponse => {
+                    toast.showToast(errorResponse.message, true);
+                })
             })
-        })
     }
 
     newRound() {
@@ -61,10 +61,10 @@ class Game {
             .then(response => {
                 return (response);
             }).catch(error => {
-            error.json().then(errorResponse => {
-                toast.showToast(errorResponse.message, true);
+                error.json().then(errorResponse => {
+                    toast.showToast(errorResponse.message, true);
+                })
             })
-        })
     }
 
     retrieveActiveRound() {
@@ -85,10 +85,10 @@ class Game {
             .then(response => {
                 return response;
             }).catch(error => {
-            error.json().then(errorResponse => {
-                toast.showToast(errorResponse.message, true);
+                error.json().then(errorResponse => {
+                    toast.showToast(errorResponse.message, true);
+                })
             })
-        })
     }
 
     playTurn(guessedWord) {
@@ -120,7 +120,12 @@ class Game {
             })
     }
 
-
+    getGameMessage(message) {
+        return fetch("assets/resources/gameMessages.json", {}).then(resp => resp.json())
+            .then(response => {
+                return response[message];
+            });
+    }
 }
 
 export default new Game();

@@ -1,0 +1,7 @@
+{
+  "TURN_TIME_OVER": "De tijd van de beurt is over",
+  "GUESSED_WORD_IS_NULL": "Er is geen woord opgegeven",
+  "GUESSED_WORD_DIFF_LENGTH": "Het opgegeven woord is te lang",
+  "GUESSED_WORD_INVALID_CHAR": "Het opgegeven woord bevat ongeldige tekens",
+  "GUESSED_WORD_NOT_FOUND": "Het opgegeven woord bestaat niet"
+}

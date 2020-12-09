@@ -13,6 +13,7 @@ class Toast {
 
         setTimeout(() => {
             toast.classList.add("hidden");
+            this.hidden = true;
         }, 3000);
     }
 }
