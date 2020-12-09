@@ -17,29 +17,35 @@
   }
 
   .game {
-    .round__word {
-      margin-bottom: 10px;
-      display: flex;
+    .round {
+      &:not(.hidden) {
+        margin-bottom: 30px;
+      }
 
-      .word__letter {
-        text-align: center;
-        border-radius: $border-radius;
-        width: 70px;
-        height: 70px;
-        font-size: 40px;
-        background-color: #0367b6;
-        color: #fff;
+      &__word {
+        margin-bottom: 10px;
+        display: flex;
 
-        &:not(:last-child) {
-          margin-right: 20px;
-        }
+        .word__letter {
+          text-align: center;
+          border-radius: $border-radius;
+          width: 70px;
+          height: 70px;
+          font-size: 40px;
+          background-color: #0367b6;
+          color: #fff;
 
-        &--correct {
-          background-color: #0d920d;
-        }
+          &:not(:last-child) {
+            margin-right: 20px;
+          }
 
-        &--present {
-          background-color: #bfbc00;
+          &--correct {
+            background-color: #0d920d;
+          }
+
+          &--present {
+            background-color: #bfbc00;
+          }
         }
       }
     }

@@ -30,6 +30,7 @@ function bindEvents() {
         game.newGame(document.querySelector("select[name=game-languages]").value).then(() => {
             toggleScreenVisibility("create-game", false);
             toggleScreenVisibility("create-round", true);
+            toggleScreenVisibility("round", false);
             toast.showToast("Game aangemaakt");
         });
     });
@@ -73,6 +74,7 @@ function newWordLetters(firstLetter, amount, guessedLetters = null) {
         amount = document.querySelectorAll(".round__word")[0].querySelectorAll(".word__letter").length;
     }
 
+    // create new boxes
     for (let count = 0; count < amount; count++) {
         const letter = document.createElement("input");
         letter.className = "word__letter";
@@ -84,12 +86,9 @@ function newWordLetters(firstLetter, amount, guessedLetters = null) {
             letter.classList.add("word__letter--correct");
         }
 
-        if (guessedLetters !== null && amount === guessedLetters.length) {
-            const letterFeedback = guessedLetters[count].letterFeedback;
-            if (["CORRECT", "PRESENT"].includes(letterFeedback)) {
-                letter.classList.add(`word__letter--${letterFeedback.toLowerCase()}`);
-                letter.value = guessedLetters[count].letter;
-            }
+        if (guessedLetters !== null && guessedLetters[count].letterFeedback === "CORRECT") {
+            letter.value = guessedLetters[count].letter;
+            letter.classList.add("word__letter--correct");
         }
 
         word.appendChild(letter);
@@ -101,6 +100,30 @@ function newWordLetters(firstLetter, amount, guessedLetters = null) {
     toggleScreenVisibility("round", true);
     toggleScreenVisibility("play-turn", true);
     toggleScreenVisibility("create-round", false);
+}
+
+function showLetterFeedback(guessedLetters = null, correctGuess) {
+    const words = document.querySelectorAll(".round__word");
+    if (guessedLetters !== null) {
+        let timeout = 0;
+        let lastWordLength = words.length > 1 ? 2 : 1;
+        // lastWordLength = correctGuess ? lastWordLength + 1 : lastWordLength;
+        const lastWordIndex = correctGuess ? words.length - lastWordLength + 1 : words.length - lastWordLength;
+        const lastWord = words[lastWordIndex];
+        const letterBoxes = lastWord.querySelectorAll(".word__letter");
+        for (let count = 0; count < letterBoxes.length; count++) {
+            setTimeout(() => {
+                const letter = letterBoxes[count];
+                const letterFeedback = guessedLetters[count].letterFeedback;
+                if (["CORRECT", "PRESENT"].includes(letterFeedback)) {
+                    letter.classList.add(`word__letter--${letterFeedback.toLowerCase()}`);
+                    letter.value = guessedLetters[count].letter;
+                }
+            }, timeout);
+            const fadeTime = 1000 / letterBoxes.length;
+            timeout += fadeTime;
+        }
+    }
 }
 
 function bindWordEvents() {
@@ -130,14 +153,17 @@ function bindPlayTurnBtn() {
         });
 
         game.playTurn(guessedWord).then(response => {
+            let correctGuess = false;
             if (response.gameOver) {
-                toggleScreenVisibility("round", false);
+                // toggleScreenVisibility("round", false);
                 toggleScreenVisibility("create-game", true);
+                toggleScreenVisibility("play-turn", false);
                 toast.showToast("Het woord is helaas niet in 5 beurten geraden. Het spel is afgelopen");
             } else if (response.correctGuess) {
+                correctGuess = true;
                 toggleScreenVisibility("create-round", true);
                 toggleScreenVisibility("play-turn", false);
-                toggleScreenVisibility("round", false);
+                // toggleScreenVisibility("round", false);
                 setProfile();
                 toast.showToast("Het woord is juist geraden! Maak een nieuwe ronde aan om verder te gaan met het spel")
             } else {
@@ -153,7 +179,11 @@ function bindPlayTurnBtn() {
                 } else {
                     guessedLetters = response.feedback.guessedLetters;
                 }
+
                 newWordLetters(firstLetter, guessedLettersLength, guessedLetters);
+            }
+            if (response.feedback.code === -9999) {
+                showLetterFeedback(response.feedback.guessedLetters, correctGuess);
             }
         });
     });
