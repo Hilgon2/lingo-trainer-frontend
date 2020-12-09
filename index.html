@@ -11,8 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
     <script src="assets/js/main.js" type="module" defer></script>
-    <script src="assets/js/game.js" type="module" defer></script>
-    <script src="assets/js/lib/jwt-decode.js"></script>
+    <script src="assets/js/gameHandler.js" type="module" defer></script>
 
 </head>
 <body>
@@ -20,20 +19,24 @@
     <div class="container">
         <div class="content">
             <div class="layout-grid game">
-                <!--                <div class="game__word">-->
-                <!--                    <div class="game__word-letter">W</div>-->
-                <!--                    <div class="game__word-letter">A</div>-->
-                <!--                    <div class="game__word-letter">T</div>-->
-                <!--                    <div class="game__word-letter">E</div>-->
-                <!--                    <div class="game__word-letter">R</div>-->
-                <!--                </div>-->
+                <div class="game__round">
+                    <div class="round-words"></div>
+                    <div class="play-turn hidden">
+                        <button class="play-turn__btn">Beurt spelen</button>
+                    </div>
+                </div>
                 <div class="create-game hidden">
                     <div>U heeft geen actieve game</div>
                     <br/>
                     <button class="create-game__btn">Nieuwe game aanmaken</button>
                     <select name="game-languages">
-                    <option value="nl_nl">nl_nl</option>
+                        <option value="nl_nl">nl_nl</option>
                     </select>
+                </div>
+                <div class="create-round hidden">
+                    <div>Start een nieuwe ronde voor het huidige spel</div>
+                    <br/>
+                    <button class="create-round__btn">Ronde starten</button>
                 </div>
             </div>
         </div>
@@ -42,39 +45,6 @@
                 <div class="user__username-wrapper">Goedendag, <span class="user__username"></span></div>
                 <div class="user__highscore-wrapper">Highscore: <span class="user__highscore"></span></div>
                 <button class="logout">Uitloggen</button>
-            </div>
-            <div class="layout-grid highscores">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Naam</th>
-                        <th>Score</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1.</td>
-                        <td>Terry</td>
-                        <td>52</td>
-                    </tr>
-                    <tr>
-                        <td>1.</td>
-                        <td>Terry</td>
-                        <td>52</td>
-                    </tr>
-                    <tr>
-                        <td>1.</td>
-                        <td>Terry</td>
-                        <td>52</td>
-                    </tr>
-                    <tr>
-                        <td>1.</td>
-                        <td>Terry</td>
-                        <td>52</td>
-                    </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>

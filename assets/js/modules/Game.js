@@ -10,7 +10,7 @@ class Game {
             }
         }).then(resp => resp.json())
             .then(response => {
-                return response;
+                sessionStorage.setItem("activeGame", JSON.stringify(response));
             });
     }
 
@@ -19,7 +19,7 @@ class Game {
             "languageCode": language
         };
 
-        fetch(`${config.getEndpoint()}/games`, {
+        return fetch(`${config.getEndpoint()}/games`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${sessionStorage.getItem("token")}`
@@ -34,20 +34,90 @@ class Game {
             }
         })
             .then(response => {
-                console.log(response);
+                sessionStorage.setItem("activeGame", JSON.stringify(response));
+                return response;
             }).catch(error => {
-                error.json().then(errorResponse => {
-                    toast.showToast(errorResponse.message, true);
-                })
+            error.json().then(errorResponse => {
+                toast.showToast(errorResponse.message, true);
+            })
         })
     }
 
     newRound() {
-
+        const currentGameId = JSON.parse(sessionStorage.getItem("activeGame")).gameId;
+        return fetch(`${config.getEndpoint()}/games/${currentGameId}/rounds`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            },
+            method: "POST"
+        }).then(resp => {
+            if (resp.ok) {
+                return resp.json();
+            } else {
+                throw resp;
+            }
+        })
+            .then(response => {
+                return (response);
+            }).catch(error => {
+            error.json().then(errorResponse => {
+                toast.showToast(errorResponse.message, true);
+            })
+        })
     }
 
-    playTurn() {
+    retrieveActiveRound() {
+        const currentGameId = JSON.parse(sessionStorage.getItem("activeGame")).gameId;
 
+        return fetch(`${config.getEndpoint()}/games/${currentGameId}/rounds/active`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            }
+        }).then(resp => {
+            if (resp.status === 200) {
+                return resp.json();
+            } else {
+                throw resp;
+            }
+        })
+            .then(response => {
+                return response;
+            }).catch(error => {
+            error.json().then(errorResponse => {
+                toast.showToast(errorResponse.message, true);
+            })
+        })
+    }
+
+    playTurn(guessedWord) {
+        const currentGameId = JSON.parse(sessionStorage.getItem("activeGame")).gameId;
+        const data = {
+            "guessedWord": guessedWord
+        }
+
+        return fetch(`${config.getEndpoint()}/games/${currentGameId}/rounds/turn`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            },
+            method: "POST",
+            body: JSON.stringify(data)
+        }).then(resp => {
+            if (resp.status === 200) {
+                return resp.json();
+            } else {
+                throw resp;
+            }
+        })
+            .then(response => {
+                return response;
+            }).catch(error => {
+                error.json().then(errorResponse => {
+                    toast.showToast(errorResponse.message, true);
+                })
+            })
     }
 
 

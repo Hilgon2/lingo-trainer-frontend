@@ -1,6 +1,4 @@
 class Config {
-    apiConfig = null;
-
     constructor() {
         fetch("config/config.json")
             .then(resp => resp.json())
@@ -8,7 +6,7 @@ class Config {
                 fetch(`config/config-${config.environment}.json`)
                     .then(resp => resp.json())
                     .then(environmentConfig => {
-                        this.apiConfig = environmentConfig;
+                        sessionStorage.setItem("apiConfig", JSON.stringify(environmentConfig));
                     }).catch(() => {
                     console.warn(`Something went wrong reading file config/config-${config.environment}.json. Check if the file is missing.`);
                 });
@@ -16,7 +14,7 @@ class Config {
     }
 
     getEndpoint() {
-        const config = this.apiConfig;
+        const config = JSON.parse(sessionStorage.getItem("apiConfig"));
 
         if (!config) {
             setTimeout(() => {

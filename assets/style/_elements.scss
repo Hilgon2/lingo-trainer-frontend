@@ -5,6 +5,7 @@ input, select {
   border: 1px solid #bbbbbb;
   border-radius: $border-radius;
   font-size: $font-size;
+  height: 40px;
 }
 
 button {
@@ -15,6 +16,7 @@ button {
   color: #fff;
   cursor: pointer;
   transition: $transition;
+  height: 40px;
 
   &:hover {
     background-color: darken(#437dc8, 10%);

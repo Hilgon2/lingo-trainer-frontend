@@ -1,4 +1,5 @@
 import config from "./Config.js";
+import toast from "./Toast.js";
 
 class Authentication {
     register(form) {
@@ -109,6 +110,27 @@ class Authentication {
     logout() {
         sessionStorage.removeItem("token");
         location.replace("login.html");
+    }
+
+    retrieveCurrentUser() {
+        const token = sessionStorage.getItem("token");
+
+        return fetch(`${config.getEndpoint()}/users/me`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        }).then(resp => {
+            if (resp.status === 200) {
+                return resp.json();
+            } else {
+                throw resp;
+            }
+        }).catch(error => {
+            error.json().then(response => {
+                toast.showToast(response, true);
+            })
+        })
     }
 }
 
