@@ -120,7 +120,7 @@ function showLetterFeedback(guessedLetters = null, correctGuess) {
                     letter.value = guessedLetters[count].letter;
                 }
             }, timeout);
-            const fadeTime = 1000 / letterBoxes.length;
+            const fadeTime = 800 / letterBoxes.length;
             timeout += fadeTime;
         }
     }
