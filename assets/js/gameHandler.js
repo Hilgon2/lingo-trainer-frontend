@@ -104,7 +104,7 @@ function newWordLetters(firstLetter, amount) {
     toggleScreenVisibility("create-round", false);
 }
 
-function showLetterFeedback(guessedLetters = null, correctGuess) {
+function showLetterFeedback(guessedLetters = null) {
     const words = document.querySelectorAll(".round__word");
     if (guessedLetters !== null) {
         let timeout = 0;
@@ -168,14 +168,12 @@ function bindPlayTurnBtn() {
             }
 
             if (response.gameOver) {
-                // toggleScreenVisibility("round", false);
                 toggleScreenVisibility("create-game", true);
                 toggleScreenVisibility("play-turn", false);
                 toast.showToast("Het woord is helaas niet in 5 beurten geraden. Het spel is afgelopen");
             } else if (response.correctGuess) {
                 toggleScreenVisibility("create-round", true);
                 toggleScreenVisibility("play-turn", false);
-                // toggleScreenVisibility("round", false);
                 setProfile();
                 toast.showToast("Het woord is juist geraden! Maak een nieuwe ronde aan om verder te gaan met het spel")
             } else {
