@@ -7,6 +7,10 @@
   display: flex;
   justify-content: space-evenly;
 
+  .hidden {
+    display: none;
+  }
+
   .layout-grid {
     background-color: #fff;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
@@ -54,9 +58,6 @@
       margin-top: 40px;
     }
 
-    .hidden {
-      display: none;
-    }
   }
 
   .sidebar {
@@ -70,6 +71,11 @@
       .logout {
         font-size: 14px;
       }
+
+      button {
+        vertical-align: middle;
+      }
+
     }
   }
 }
@@ -91,6 +97,18 @@
   }
 
   &.hidden {
+    display: block;
     bottom: -100px;
+  }
+}
+
+#newDictionaryForm {
+  label {
+    display: block;
+
+    input {
+      margin-bottom: 20px;
+      display: block;
+    }
   }
 }

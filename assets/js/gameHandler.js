@@ -16,6 +16,9 @@ function setProfile() {
     auth.retrieveCurrentUser().then(response => {
         document.querySelector(".user__username").textContent = response.username;
         document.querySelector(".user__highscore").textContent = response.highscore;
+        if (response.admin) {
+            document.querySelector(".toggle-new-dictionary").classList.remove("hidden");
+        }
     });
 }
 
