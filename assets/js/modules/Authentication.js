@@ -9,7 +9,8 @@ class Authentication {
         let password = form.querySelector("input[name='password']").value;
         const data = {
             "username": username,
-            "password": password
+            "password": password,
+            "active": true
         }
 
         fetch(`${config.getEndpoint()}/users`, {

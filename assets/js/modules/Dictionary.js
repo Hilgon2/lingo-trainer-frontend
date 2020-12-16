@@ -3,11 +3,6 @@ import config from "./Config.js";
 class Dictionary {
 
     retrieveLanguages() {
-        if (!config.getEndpoint()) {
-            setTimeout(() => {
-                return this.retrieveLanguages();
-            }, 300);
-        } else {
             return fetch(`${config.getEndpoint()}/dictionary/languages`, {
                 headers: {
                     "Content-Type": "application/json",
@@ -24,7 +19,6 @@ class Dictionary {
                     return response;
                 });
         }
-    }
 
     saveDictionary() {
 

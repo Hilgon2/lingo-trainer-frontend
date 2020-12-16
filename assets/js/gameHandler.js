@@ -3,13 +3,13 @@ import dictionary from "./modules/Dictionary.js";
 import game from "./modules/Game.js";
 import toast from "./modules/Toast.js";
 
-window.onload = () => onLoad();
+onLoad();
 
 function onLoad() {
     setProfile();
     bindEvents();
     initialGameScreenHandler();
-    dictionary.retrieveLanguages();
+    fillLanguages();
 }
 
 function setProfile() {
@@ -37,6 +37,7 @@ function bindEvents() {
 
     // create new round button
     document.querySelector(".create-round__btn").addEventListener("click", () => {
+            sessionStorage.setItem("guessedLetters", JSON.stringify([]));
         game.newRound().then(response => {
             document.querySelector(".round-words").innerHTML = "";
             sessionStorage.setItem("activeRound", JSON.stringify(response));
@@ -66,7 +67,8 @@ function initialGameScreenHandler() {
     });
 }
 
-function newWordLetters(firstLetter, amount, guessedLetters = null) {
+function newWordLetters(firstLetter, amount) {
+    const guessedLetters = JSON.parse(sessionStorage.getItem("guessedLetters"));
     const word = document.createElement("div");
     word.className = "round__word";
 
@@ -86,7 +88,7 @@ function newWordLetters(firstLetter, amount, guessedLetters = null) {
             letter.classList.add("word__letter--correct");
         }
 
-        if (guessedLetters !== null && guessedLetters[count].letterFeedback === "CORRECT") {
+        if (guessedLetters.length === amount && guessedLetters[count].letterFeedback === "CORRECT") {
             letter.value = guessedLetters[count].letter;
             letter.classList.add("word__letter--correct");
         }
@@ -106,11 +108,15 @@ function showLetterFeedback(guessedLetters = null, correctGuess) {
     const words = document.querySelectorAll(".round__word");
     if (guessedLetters !== null) {
         let timeout = 0;
-        let lastWordLength = words.length > 1 ? 2 : 1;
-        // lastWordLength = correctGuess ? lastWordLength + 1 : lastWordLength;
-        const lastWordIndex = correctGuess ? words.length - lastWordLength + 1 : words.length - lastWordLength;
+        let lastWordIndex = 0;
+
+        if (words.length > 1) {
+            lastWordIndex = words.length - 1;
+        }
+
         const lastWord = words[lastWordIndex];
         const letterBoxes = lastWord.querySelectorAll(".word__letter");
+
         for (let count = 0; count < letterBoxes.length; count++) {
             setTimeout(() => {
                 const letter = letterBoxes[count];
@@ -118,9 +124,12 @@ function showLetterFeedback(guessedLetters = null, correctGuess) {
                 if (["CORRECT", "PRESENT"].includes(letterFeedback)) {
                     letter.classList.add(`word__letter--${letterFeedback.toLowerCase()}`);
                     letter.value = guessedLetters[count].letter;
+                } else {
+                    letter.classList.remove("word__letter--correct");
+                    letter.classList.remove("word__letter--present");
                 }
             }, timeout);
-            const fadeTime = 800 / letterBoxes.length;
+            const fadeTime = 900 / letterBoxes.length;
             timeout += fadeTime;
         }
     }
@@ -132,8 +141,8 @@ function bindWordEvents() {
 
     for (const letterBox of lastWord.querySelectorAll(".word__letter")) {
         letterBox.addEventListener("keyup", event => {
-            if (event.target.value) {
-                letterBox.value = letterBox.value.toUpperCase();
+            if (event.code.substr(0, 3) === "Key") {
+                letterBox.value = event.key.toUpperCase();
                 if (letterBox.nextElementSibling !== null) {
                     letterBox.nextElementSibling.focus();
                 }
@@ -153,14 +162,17 @@ function bindPlayTurnBtn() {
         });
 
         game.playTurn(guessedWord).then(response => {
-            let correctGuess = false;
+            if (response.feedback.code === -9999) {
+                showLetterFeedback(response.feedback.guessedLetters, response.correctGuess);
+                sessionStorage.setItem("guessedLetters", JSON.stringify(response.feedback.guessedLetters));
+            }
+
             if (response.gameOver) {
                 // toggleScreenVisibility("round", false);
                 toggleScreenVisibility("create-game", true);
                 toggleScreenVisibility("play-turn", false);
                 toast.showToast("Het woord is helaas niet in 5 beurten geraden. Het spel is afgelopen");
             } else if (response.correctGuess) {
-                correctGuess = true;
                 toggleScreenVisibility("create-round", true);
                 toggleScreenVisibility("play-turn", false);
                 // toggleScreenVisibility("round", false);
@@ -170,20 +182,14 @@ function bindPlayTurnBtn() {
                 const activeRound = JSON.parse(sessionStorage.getItem("activeRound"));
                 let firstLetter = activeRound.firstLetter;
                 const guessedLettersLength = activeRound.lettersAmount;
-                let guessedLetters;
 
                 if (response.feedback.code !== -9999) {
                     game.getGameMessage(response.feedback.status).then(response => {
                         toast.showToast(response);
                     });
-                } else {
-                    guessedLetters = response.feedback.guessedLetters;
                 }
 
-                newWordLetters(firstLetter, guessedLettersLength, guessedLetters);
-            }
-            if (response.feedback.code === -9999) {
-                showLetterFeedback(response.feedback.guessedLetters, correctGuess);
+                newWordLetters(firstLetter, guessedLettersLength);
             }
         });
     });
@@ -201,4 +207,16 @@ function toggleScreenVisibility(screen, visible) {
     } else {
         document.querySelector(screens[screen]).classList.add("hidden");
     }
+}
+
+function fillLanguages() {
+    dictionary.retrieveLanguages().then(response => {
+        const languages = document.querySelector("[name=game-languages]");
+        for (const language of response) {
+            const option = document.createElement("option");
+            option.value = language;
+            option.textContent = language;
+            languages.appendChild(option);
+        }
+    });
 }
