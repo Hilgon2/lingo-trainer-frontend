@@ -40,7 +40,6 @@ class Dictionary {
                 toast.showToast(message, true);
             }
         }).then(response => {
-            console.log(response);
             if (response) {
                 return response;
             }
