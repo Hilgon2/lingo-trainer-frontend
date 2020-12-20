@@ -133,6 +133,28 @@ class Authentication {
             })
         })
     }
+
+    retrieveUsersByHighscores() {
+        const token = sessionStorage.getItem("token");
+
+        return fetch(`${config.getEndpoint()}/users/highscores`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(resp => {
+                if (resp.status === 200) {
+                    return resp.json();
+                } else {
+                    throw resp;
+                }
+            }).catch(error => {
+                error.json().then(response => {
+                    toast.showToast(response, true);
+                })
+            });
+    }
 }
 
 export default new Authentication();

@@ -10,6 +10,7 @@ function onLoad() {
     bindEvents();
     initialGameScreenHandler();
     fillLanguages();
+    setHighscores();
 }
 
 function setProfile() {
@@ -219,5 +220,17 @@ function fillLanguages() {
             option.textContent = language;
             languages.appendChild(option);
         }
+    });
+}
+
+function setHighscores() {
+    auth.retrieveUsersByHighscores().then(response => {
+       const highscoresList = document.querySelector(".highscores__list");
+
+       for (const user of response) {
+           const highscore = document.createElement("li");
+           highscore.textContent = `• ${user.highscore}: ${user.username}`;
+           highscoresList.appendChild(highscore);
+       }
     });
 }
